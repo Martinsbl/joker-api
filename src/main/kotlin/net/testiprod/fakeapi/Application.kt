@@ -1,14 +1,14 @@
-package net.testiprod
+package net.testiprod.fakeapi
 
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import net.testiprod.plugins.*
+import net.testiprod.fakeapi.plugins.configureRouting
 
 fun main() {
     embeddedServer(
         CIO,
-        port = 8080,
+        port = 80,
         host = "0.0.0.0",
         module = Application::module
     )
