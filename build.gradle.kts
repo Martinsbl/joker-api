@@ -1,5 +1,3 @@
-import java.net.URI
-
 val kotlin_version: String by project
 val logback_version: String by project
 
@@ -10,7 +8,7 @@ plugins {
 }
 
 group = "net.testiprod"
-version = "0.0.1"
+version = "0.0.5"
 
 application {
     mainClass.set("net.testiprod.ApplicationKt")
@@ -28,6 +26,10 @@ dependencies {
     implementation("io.ktor:ktor-server-cio-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
+    implementation("dev.langchain4j:langchain4j-azure-open-ai:0.35.0")
+    implementation("dev.langchain4j:langchain4j-open-ai:0.35.0")
+    implementation("dev.langchain4j:langchain4j:0.35.0")
+
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
@@ -38,6 +40,7 @@ jib {
     }
     to {
         image = "${findProperty("docker-registry.haven.url") as String? ?: "missing registry url"}/fakeapi"
+        tags = setOf("latest", version as String)
         auth {
             username = findProperty("docker-registry.haven.username") as String? ?: "missing registry username"
             password = findProperty("docker-registry.haven.password") as String? ?: "missing registry password"
