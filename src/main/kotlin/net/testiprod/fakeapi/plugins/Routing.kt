@@ -7,6 +7,10 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.testiprod.fakeapi.AppConfig
+import org.slf4j.LoggerFactory
+
+
+private val logger = LoggerFactory.getLogger("net.testiprod.fakeapi.plugins.Routing.chat")
 
 private val azureOpenAiModel: AzureOpenAiChatModel = AzureOpenAiChatModel.builder()
     .apiKey(AppConfig.azureConfig.apiKey)
@@ -23,11 +27,12 @@ private val openAiModel: OpenAiChatModel = OpenAiChatModel.builder()
 fun Application.configureRouting() {
     routing {
         get("/chat") {
-            val promptQuery = call.request.queryParameters["promptQuery"]
+            val prompt = call.request.queryParameters["prompt"]
             val model = call.request.queryParameters["model"]
+            logger.trace("/chat called with model = '$model', prompt = '$prompt'")
 
             val topic = AppConfig.jokeTopics.random()
-            val promptResponse = askAi(getModel(model), promptQuery ?: "Tell me a joke about $topic")
+            val promptResponse = askAi(getModel(model), prompt ?: "Tell me a joke about $topic")
             val response = promptResponse?.let {
                 "Here is a joke about $topic:\n$it"
             } ?: "No response from AI"
@@ -44,9 +49,9 @@ fun getModel(modelName: String?): ChatLanguageModel {
     }
 }
 
-private fun askAi(chatModel: ChatLanguageModel, promptQuery: String): String? {
-    val answer = chatModel.generate(promptQuery)
-    println(promptQuery)
-    println(answer)
+private fun askAi(chatModel: ChatLanguageModel, prompt: String): String? {
+    val answer = chatModel.generate(prompt)?.replace("\n\n", "\n")
+    logger.trace("Prompt: $prompt")
+    logger.trace("Answer: $answer")
     return answer
 }

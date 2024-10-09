@@ -9,7 +9,7 @@ spec:
   nodeSelector:
     kubernetes.io/os: linux
   containers:
-    - image: haven.testiprod.net/fakeapi:0.0.7
+    - image: haven.testiprod.net/fakeapi:0.0.8
 #      imagePullPolicy: Always
       name: fake-api
       volumeMounts:
@@ -17,11 +17,11 @@ spec:
           mountPath: /config
       resources:
         requests:
-          cpu: 100m
-          memory: 128Mi
-        limits:
-          cpu: 250m
+          cpu: 200m
           memory: 256Mi
+        limits:
+          cpu: 750m
+          memory: 800Mi
       ports:
         - containerPort: 80
           name: http
