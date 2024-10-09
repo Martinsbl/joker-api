@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.testiprod"
-version = "0.0.8"
+version = "0.0.10"
 
 application {
     mainClass.set("net.testiprod.ApplicationKt")
@@ -56,4 +56,22 @@ jib {
         )
         creationTime = "USE_CURRENT_TIMESTAMP"
     }
+}
+
+tasks.register("generateVersionFile") {
+    doLast {
+        val versionFile = file("src/main/kotlin/net/testiprod/fakeapi/BuildConfig.kt")
+        versionFile.parentFile.mkdirs()
+        versionFile.writeText("""
+            package net.testiprod.fakeapi
+
+            object BuildConfig {
+                const val VERSION = "${project.version}"
+            }
+        """.trimIndent())
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    dependsOn("generateVersionFile")
 }

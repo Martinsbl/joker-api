@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.testiprod.fakeapi.AppConfig
+import net.testiprod.fakeapi.BuildConfig
 import org.slf4j.LoggerFactory
 
 
@@ -29,14 +30,15 @@ fun Application.configureRouting() {
         get("/chat") {
             val prompt = call.request.queryParameters["prompt"]
             val model = call.request.queryParameters["model"]
-            logger.trace("/chat called with model = '$model', prompt = '$prompt'")
+            logger.trace("\"/chat\" v${BuildConfig.VERSION} called with model = '$model', prompt = '$prompt'")
 
             val topic = AppConfig.jokeTopics.random()
             val promptResponse = askAi(getModel(model), prompt ?: "Tell me a joke about $topic")
             val response = promptResponse?.let {
                 "Here is a joke about $topic:\n$it"
             } ?: "No response from AI"
-            call.respondText(response)
+
+            call.respondText(response + "\n\nv${BuildConfig.VERSION}")
         }
     }
 }

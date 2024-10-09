@@ -9,7 +9,7 @@ spec:
   nodeSelector:
     kubernetes.io/os: linux
   containers:
-    - image: haven.testiprod.net/fakeapi:0.0.8
+    - image: haven.testiprod.net/fakeapi:0.0.10
 #      imagePullPolicy: Always
       name: fake-api
       volumeMounts:
