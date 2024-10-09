@@ -10,8 +10,11 @@ spec:
     kubernetes.io/os: linux
   containers:
     - image: haven.testiprod.net/fakeapi:0.0.7
-      imagePullPolicy: Always
+#      imagePullPolicy: Always
       name: fake-api
+      volumeMounts:
+        - name: config-volume
+          mountPath: /config
       resources:
         requests:
           cpu: 100m
@@ -24,6 +27,10 @@ spec:
           name: http
   imagePullSecrets:
     - name: dockerregcred
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config
 
 ---
 
