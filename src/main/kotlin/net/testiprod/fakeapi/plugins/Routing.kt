@@ -3,24 +3,22 @@ package net.testiprod.fakeapi.plugins
 import dev.langchain4j.model.azure.AzureOpenAiChatModel
 import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.model.openai.OpenAiChatModel
-import dev.langchain4j.model.openai.OpenAiChatModelName
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import net.testiprod.fakeapi.AppConfig
 
-private val apiKey: String = System.getenv("AZURE_OPENAI_KEY")
-private val apiEndpoint: String = System.getenv("AZURE_ENDPOINT_URL")
 private val azureOpenAiModel: AzureOpenAiChatModel = AzureOpenAiChatModel.builder()
-    .apiKey(apiKey)
-    .deploymentName("gpt-4")
-    .endpoint(apiEndpoint)
+    .apiKey(AppConfig.azureConfig.apiKey)
+    .deploymentName(AppConfig.azureConfig.deploymentName)
+    .endpoint(AppConfig.azureConfig.apiEndpoint)
     .build()
 
 
 private val openAiModel: OpenAiChatModel = OpenAiChatModel.builder()
-    .apiKey("demo")
-    .modelName(OpenAiChatModelName.GPT_4_O_MINI)
-    .build();
+    .apiKey(AppConfig.openAiConfig.apiKey)
+    .modelName(AppConfig.openAiConfig.modelName)
+    .build()
 
 fun Application.configureRouting() {
     routing {
@@ -28,8 +26,12 @@ fun Application.configureRouting() {
             val promptQuery = call.request.queryParameters["promptQuery"]
             val model = call.request.queryParameters["model"]
 
-            val aiChat = askAi(getModel(model), promptQuery ?: "Tell me a joke")
-            call.respondText(aiChat ?: "No response from AI")
+            val topic = AppConfig.jokeTopics.random()
+            val promptResponse = askAi(getModel(model), promptQuery ?: "Tell me a joke about $topic")
+            val response = promptResponse?.let {
+                "Here is a joke about $topic:\n$it"
+            } ?: "No response from AI"
+            call.respondText(response)
         }
     }
 }
