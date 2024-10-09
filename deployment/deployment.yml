@@ -10,7 +10,6 @@ spec:
     kubernetes.io/os: linux
   containers:
     - image: haven.testiprod.net/fakeapi:0.0.10
-#      imagePullPolicy: Always
       name: fake-api
       volumeMounts:
         - name: config-volume

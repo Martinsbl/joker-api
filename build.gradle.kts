@@ -22,10 +22,13 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm")
+    implementation("io.ktor:ktor-serialization-gson")
     implementation("io.ktor:ktor-server-cio-jvm")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("io.ktor:ktor-server-core-jvm")
+    implementation("io.ktor:ktor-server-cors-jvm")
 
+    implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("dev.langchain4j:langchain4j-azure-open-ai:0.35.0")
     implementation("dev.langchain4j:langchain4j-open-ai:0.35.0")
     implementation("dev.langchain4j:langchain4j:0.35.0")
