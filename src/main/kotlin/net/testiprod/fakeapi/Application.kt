@@ -7,7 +7,7 @@ import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
-import net.testiprod.fakeapi.plugins.configureRouting
+import net.testiprod.fakeapi.plugins.configureApiRouting
 
 fun main() {
     embeddedServer(
@@ -22,7 +22,7 @@ fun main() {
 fun Application.module() {
     configureCors()
     configureSerialization()
-    configureRouting()
+    configureApiRouting()
 }
 
 

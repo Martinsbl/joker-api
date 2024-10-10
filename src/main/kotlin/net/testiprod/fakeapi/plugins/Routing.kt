@@ -34,37 +34,39 @@ data class ApiInfo(
     val version: String,
 )
 
-fun Application.configureRouting() {
+fun Application.configureApiRouting() {
     routing {
-        get("/version") {
-            call.respond(ApiInfo(BuildConfig.VERSION))
-        }
-        get("/chat") {
-            val prompt = call.request.queryParameters["prompt"]
-            requireNotNull(prompt)
-            val model = call.request.queryParameters["model"]
-            logger.trace("\"/chat\" called with model = '$model', prompt = '$prompt'")
+        route("/api") {
+            get("/version") {
+                call.respond(ApiInfo(BuildConfig.VERSION))
+            }
+            get("/chat") {
+                val prompt = call.request.queryParameters["prompt"]
+                requireNotNull(prompt)
+                val model = call.request.queryParameters["model"]
+                logger.trace("\"/chat\" called with model = '$model', prompt = '$prompt'")
 
-            val aiAnswer = askAi(getModel(model), prompt)
-            call.respond(
-                AiResponse(
-                    title = prompt,
-                    body = aiAnswer
+                val aiAnswer = askAi(getModel(model), prompt)
+                call.respond(
+                    AiResponse(
+                        title = prompt,
+                        body = aiAnswer
+                    )
                 )
-            )
-        }
-        get("/joke") {
-            val model = call.request.queryParameters["model"]
-            logger.trace("\"/joke\" called with model = '$model'")
+            }
+            get("/joke") {
+                val model = call.request.queryParameters["model"]
+                logger.trace("\"/joke\" called with model = '$model'")
 
-            val topic = AppConfig.jokeTopics.random()
-            val aiAnswer = askAi(getModel(model), "Tell me a joke about $topic")
-            call.respond(
-                AiResponse(
-                    title = "Here is a joke about $topic",
-                    body = aiAnswer
+                val topic = AppConfig.jokeTopics.random()
+                val aiAnswer = askAi(getModel(model), "Tell me a joke about $topic")
+                call.respond(
+                    AiResponse(
+                        title = "Here is a joke about $topic",
+                        body = aiAnswer
+                    )
                 )
-            )
+            }
         }
     }
 }
