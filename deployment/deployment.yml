@@ -9,7 +9,7 @@ spec:
   nodeSelector:
     kubernetes.io/os: linux
   containers:
-    - image: haven.testiprod.net/fakeapi:0.0.10
+    - image: haven.testiprod.net/fakeapi:0.0.12
       name: fake-api
       volumeMounts:
         - name: config-volume
@@ -22,7 +22,7 @@ spec:
           cpu: 750m
           memory: 800Mi
       ports:
-        - containerPort: 80
+        - containerPort: 3535
           name: http
   imagePullSecrets:
     - name: dockerregcred
@@ -43,8 +43,8 @@ spec:
     app: fake-api
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 3535
+      targetPort: 3535
 
 ---
 
@@ -62,6 +62,6 @@ spec:
               service:
                 name: fake-api
                 port:
-                  number: 80
+                  number: 3535
             path: /
             pathType: Prefix

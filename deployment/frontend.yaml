@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joker-frontend
+  namespace: fakeapi-namespace
+  labels:
+    app: joker-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joker-frontend
+  template:
+    metadata:
+      labels:
+        app: joker-frontend
+    spec:
+      containers:
+        - name: joker-frontend
+          image: haven.testiprod.net/joker-frontend:0.0.3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+      imagePullSecrets:
+        - name: dockerregcred
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: joker-frontend
+  namespace: fakeapi-namespace
+  labels:
+    app: joker-frontend
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: joker-frontend
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: joker-frontend
+  namespace: fakeapi-namespace
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: joker-frontend
+                port:
+                  number: 80
+            path: / # <subdirectory>
+            pathType: Prefix
+
