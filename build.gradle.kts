@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.testiprod"
-version = "0.0.12"
+version = "0.0.14"
 
 application {
     mainClass.set("net.testiprod.ApplicationKt")
@@ -42,7 +42,7 @@ jib {
         image = "openjdk:17-jdk-alpine"
     }
     to {
-        image = "${findProperty("docker-registry.haven.url") as String? ?: "missing registry url"}/fakeapi"
+        image = "${findProperty("docker-registry.haven.url") as String? ?: "missing registry url"}/joker-api"
         tags = setOf("latest", version as String)
         auth {
             username = findProperty("docker-registry.haven.username") as String? ?: "missing registry username"
@@ -51,7 +51,7 @@ jib {
     }
     container {
         mainClass = "net.testiprod.fakeapi.ApplicationKt"
-        ports = listOf("80")
+        ports = listOf("8080")
         volumes = listOf(
             "/log",
             "/files",

@@ -12,7 +12,7 @@ import net.testiprod.fakeapi.plugins.configureRouting
 fun main() {
     embeddedServer(
         CIO,
-        port = 3535,
+        port = 8080,
         host = "0.0.0.0",
         module = Application::module
     )
