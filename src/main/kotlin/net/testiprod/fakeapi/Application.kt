@@ -10,7 +10,7 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.testiprod.fakeapi.models.ApiInfo
-import net.testiprod.fakeapi.plugins.configureAiWarRouting
+import net.testiprod.fakeapi.plugins.configureAiTestRouting
 import net.testiprod.fakeapi.plugins.configureChatRouting
 import net.testiprod.fakeapi.plugins.configureJokeRouting
 
@@ -31,7 +31,7 @@ fun Application.module() {
         route("api"){
             configureChatRouting()
             configureJokeRouting()
-            configureAiWarRouting()
+            configureAiTestRouting()
             get("/version") {
                 call.respond(ApiInfo(BuildConfig.VERSION))
             }
