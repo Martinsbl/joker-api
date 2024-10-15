@@ -1,5 +1,6 @@
 package net.testiprod.fakeapi.plugins
 
+import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.service.AiServices
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -15,13 +16,12 @@ fun Route.configureChatRouting() {
     get("/chat") {
         val prompt = call.request.queryParameters["prompt"]
         requireNotNull(prompt)
-        val model = call.request.queryParameters["model"]
-        requireNotNull(model)
-        logger.trace("\"/chat\" called with model = '$model', prompt = '$prompt'")
+        logger.trace("\"/chat\" called with prompt = '$prompt'")
 
+        val model: ChatLanguageModel = getModel(call.request)
 
         val myAiAssistant = AiServices.builder(MyAIAssistant::class.java)
-            .chatLanguageModel(getModel(model))
+            .chatLanguageModel(model)
             .build()
 
         val aiAnswer = myAiAssistant.chat(prompt)

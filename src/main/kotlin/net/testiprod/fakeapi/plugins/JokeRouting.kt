@@ -14,11 +14,12 @@ private val logger = LoggerFactory.getLogger("net.testiprod.fakeapi.plugins.conf
 
 fun Route.configureJokeRouting() {
     get("/joke") {
-        val model = call.request.queryParameters["model"]
-        logger.trace("\"/joke\" called with model = '$model'")
+        logger.trace("\"/joke\" called")
 
+        val model: ChatLanguageModel = getModel(call.request)
         val topic = AppConfig.jokeTopics.random()
-        val aiAnswer = askAi(getModel(model), "Tell me a joke about $topic")
+        val aiAnswer = askAi(model, "Tell me a joke about $topic")
+
         call.respond(
             AiResponse(
                 title = "Here is a joke about $topic",

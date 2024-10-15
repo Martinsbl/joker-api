@@ -3,6 +3,7 @@ package net.testiprod.fakeapi
 import dev.langchain4j.model.azure.AzureOpenAiChatModel
 import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.model.openai.OpenAiChatModel
+import io.ktor.server.request.*
 
 object Utils {
 
@@ -18,6 +19,12 @@ object Utils {
         .modelName(AppConfig.openAiConfig.modelName)
         .build()
 
+
+    fun getModel(request: ApplicationRequest): ChatLanguageModel {
+        val queryParam = request.queryParameters["modelProvider"]
+        requireNotNull(queryParam) { "Query param 'modelProvider' must not be null" }
+        return getModel(queryParam)
+    }
 
     fun getModel(modelName: String?): ChatLanguageModel {
         return when (modelName) {
