@@ -1,4 +1,4 @@
-package net.testiprod.fakeapi
+package net.testiprod.joker
 
 import dev.langchain4j.model.azure.AzureOpenAiChatModel
 import dev.langchain4j.model.chat.ChatLanguageModel

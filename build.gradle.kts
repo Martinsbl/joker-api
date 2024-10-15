@@ -50,7 +50,7 @@ jib {
         }
     }
     container {
-        mainClass = "net.testiprod.fakeapi.ApplicationKt"
+        mainClass = "net.testiprod.joker.ApplicationKt"
         ports = listOf("8080")
         volumes = listOf(
             "/log",
@@ -63,10 +63,10 @@ jib {
 
 tasks.register("generateVersionFile") {
     doLast {
-        val versionFile = file("src/main/kotlin/net/testiprod/fakeapi/BuildConfig.kt")
+        val versionFile = file("src/main/kotlin/net/testiprod/joker/BuildConfig.kt")
         versionFile.parentFile.mkdirs()
         versionFile.writeText("""
-            package net.testiprod.fakeapi
+            package net.testiprod.joker
 
             object BuildConfig {
                 const val VERSION = "${project.version}"

@@ -1,4 +1,4 @@
-package net.testiprod.fakeapi
+package net.testiprod.joker
 
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
@@ -9,10 +9,10 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.fakeapi.models.ApiInfo
-import net.testiprod.fakeapi.plugins.configureAiTestRouting
-import net.testiprod.fakeapi.plugins.configureChatRouting
-import net.testiprod.fakeapi.plugins.configureJokeRouting
+import net.testiprod.joker.models.ApiInfo
+import net.testiprod.joker.plugins.configureAiTestRouting
+import net.testiprod.joker.plugins.configureChatRouting
+import net.testiprod.joker.plugins.configureJokeRouting
 
 fun main() {
     embeddedServer(

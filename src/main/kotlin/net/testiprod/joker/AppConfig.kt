@@ -1,4 +1,4 @@
-package net.testiprod.fakeapi
+package net.testiprod.joker
 
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory

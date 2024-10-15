@@ -1,16 +1,16 @@
-package net.testiprod.fakeapi.plugins
+package net.testiprod.joker.plugins
 
 import dev.langchain4j.data.message.UserMessage
 import dev.langchain4j.model.chat.ChatLanguageModel
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.fakeapi.Utils.getModel
-import net.testiprod.fakeapi.models.AiExtendedResponse
+import net.testiprod.joker.Utils.getModel
+import net.testiprod.joker.models.AiExtendedResponse
 import org.slf4j.LoggerFactory
 
 
-private val logger = LoggerFactory.getLogger("net.testiprod.fakeapi.plugins.configureAiTestRouting")
+private val logger = LoggerFactory.getLogger("net.testiprod.joker.plugins.configureAiTestRouting")
 
 fun Route.configureAiTestRouting() {
     get("/test") {

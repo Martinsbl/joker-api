@@ -1,4 +1,4 @@
-package net.testiprod.fakeapi.plugins
+package net.testiprod.joker.plugins
 
 import dev.langchain4j.service.SystemMessage
 

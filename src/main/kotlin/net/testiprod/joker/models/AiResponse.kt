@@ -1,4 +1,4 @@
-package net.testiprod.fakeapi.models
+package net.testiprod.joker.models
 
 import dev.langchain4j.data.message.AiMessage
 import dev.langchain4j.model.chat.ChatLanguageModel
