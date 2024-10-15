@@ -3,9 +3,14 @@ package net.testiprod.joker
 import dev.langchain4j.model.azure.AzureOpenAiChatModel
 import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.model.openai.OpenAiChatModel
+import dev.langchain4j.service.AiServices
 import io.ktor.server.request.*
+import net.testiprod.joker.ai.MemoryProvider
+import net.testiprod.joker.plugins.MyAIAssistant
 
 object Utils {
+
+    private val memoryProvider = MemoryProvider()
 
     private val azureOpenAiModel: AzureOpenAiChatModel = AzureOpenAiChatModel.builder()
         .apiKey(AppConfig.azureConfig.apiKey)
@@ -26,12 +31,25 @@ object Utils {
         return getModel(queryParam)
     }
 
-    fun getModel(modelName: String?): ChatLanguageModel {
+    private fun getModel(modelName: String?): ChatLanguageModel {
         return when (modelName) {
             "azure" -> azureOpenAiModel
             "openai" -> openAiModel
             else -> throw IllegalArgumentException("Unknown model name: $modelName")
         }
+    }
+
+    fun getAssistant(request: ApplicationRequest): Pair<MyAIAssistant, ChatLanguageModel> {
+        val model = getModel(request)
+        val userId = request.queryParameters["userId"]
+        requireNotNull(userId) { "Query param 'userId' must not be null" }
+
+        val assistant = AiServices.builder(MyAIAssistant::class.java)
+            .chatLanguageModel(model)
+            .chatMemoryProvider { memoryProvider.get(userId) }
+            .build()
+
+        return Pair(assistant, model)
     }
 
 }

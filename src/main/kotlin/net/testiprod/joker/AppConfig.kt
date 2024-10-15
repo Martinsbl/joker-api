@@ -9,6 +9,7 @@ object AppConfig {
     val azureConfig: AzureConfig
     val openAiConfig: OpenAiConfig
     val jokeTopics: List<String>
+    val chatMemoryMaxSize: Int
 
     init {
         val config = getConfigFromFile()
@@ -17,6 +18,7 @@ object AppConfig {
         openAiConfig = getOpenAiConfig(config)
 
         jokeTopics = config.getConfig("jokes").getStringList("topics")
+        chatMemoryMaxSize = config.getInt("chatMemoryMaxSize")
     }
 
     private fun getConfigFromFile(): Config {

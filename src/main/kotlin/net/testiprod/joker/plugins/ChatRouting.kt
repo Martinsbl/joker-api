@@ -1,12 +1,9 @@
 package net.testiprod.joker.plugins
 
-import dev.langchain4j.data.message.SystemMessage
-import dev.langchain4j.data.message.UserMessage
-import dev.langchain4j.model.chat.ChatLanguageModel
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.joker.Utils.getModel
+import net.testiprod.joker.Utils
 import net.testiprod.joker.models.AiExtendedResponse
 import org.slf4j.LoggerFactory
 
@@ -19,13 +16,8 @@ fun Route.configureChatRouting() {
         requireNotNull(prompt)
         logger.trace("\"/chat\" called with prompt = '$prompt'")
 
-        val model: ChatLanguageModel = getModel(call.request)
-
-        val systemMessage =
-            SystemMessage("You are The Joker from the Batman movies, and you are in a particularly sarcastic mood.")
-        val userMessage = UserMessage(prompt)
-
-        val aiAnswer = model.generate(systemMessage, userMessage)
+        val (assistant, model) = Utils.getAssistant(call.request)
+        val aiAnswer = assistant.chatWithTheJoker(prompt)
         call.respond(
             AiExtendedResponse(
                 model,
