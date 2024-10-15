@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.testiprod"
-version = "0.0.18"
+version = "0.0.19"
 
 application {
     mainClass.set("net.testiprod.ApplicationKt")

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: joker-frontend
-          image: haven.testiprod.net/joker-frontend:0.0.21
+          image: haven.testiprod.net/joker-frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

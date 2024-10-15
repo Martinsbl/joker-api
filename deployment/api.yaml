@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: joker-api
-          image: haven.testiprod.net/joker-api:0.0.18
+          image: haven.testiprod.net/joker-api:latest
           volumeMounts:
             - name: config-volume
               mountPath: /config
