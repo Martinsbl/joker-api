@@ -7,7 +7,11 @@ import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
-import net.testiprod.fakeapi.plugins.configureApiRouting
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import net.testiprod.fakeapi.models.ApiInfo
+import net.testiprod.fakeapi.plugins.configureChatRouting
+import net.testiprod.fakeapi.plugins.configureJokeRouting
 
 fun main() {
     embeddedServer(
@@ -22,7 +26,15 @@ fun main() {
 fun Application.module() {
     configureCors()
     configureSerialization()
-    configureApiRouting()
+    routing {
+        route("api"){
+            configureChatRouting()
+            configureJokeRouting()
+            get("/version") {
+                call.respond(ApiInfo(BuildConfig.VERSION))
+            }
+        }
+    }
 }
 
 
