@@ -12,6 +12,7 @@ import io.ktor.server.routing.*
 import net.testiprod.joker.models.ApiInfo
 import net.testiprod.joker.plugins.configureAiTestRouting
 import net.testiprod.joker.plugins.configureChatRouting
+import net.testiprod.joker.plugins.configureExceptions
 import net.testiprod.joker.plugins.configureJokeRouting
 
 fun main() {
@@ -27,6 +28,7 @@ fun main() {
 fun Application.module() {
     configureCors()
     configureSerialization()
+    configureExceptions()
     routing {
         route("api"){
             configureChatRouting()
