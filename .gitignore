@@ -37,3 +37,4 @@ out/
 
 config/**
 BuildConfig.kt
+deployment/
