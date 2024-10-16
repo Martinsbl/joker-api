@@ -7,12 +7,11 @@ import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.joker.models.ApiInfo
 import net.testiprod.joker.plugins.configureAiTestRouting
 import net.testiprod.joker.plugins.configureChatRouting
 import net.testiprod.joker.plugins.configureExceptions
+import net.testiprod.joker.plugins.configureInfoRouting
 import net.testiprod.joker.plugins.configureJokeRouting
 
 fun main() {
@@ -34,9 +33,7 @@ fun Application.module() {
             configureChatRouting()
             configureJokeRouting()
             configureAiTestRouting()
-            get("/version") {
-                call.respond(ApiInfo(BuildConfig.VERSION))
-            }
+            configureInfoRouting()
         }
     }
 }
