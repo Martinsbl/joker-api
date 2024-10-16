@@ -8,6 +8,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.routing.*
+import net.testiprod.joker.plugins.configureAiDialogRouting
 import net.testiprod.joker.plugins.configureAiTestRouting
 import net.testiprod.joker.plugins.configureChatRouting
 import net.testiprod.joker.plugins.configureExceptions
@@ -34,6 +35,7 @@ fun Application.module() {
             configureJokeRouting()
             configureAiTestRouting()
             configureInfoRouting()
+            configureAiDialogRouting()
         }
     }
 }
