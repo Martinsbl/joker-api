@@ -16,7 +16,7 @@ fun Route.configureChatRouting() {
         requireNotNull(prompt)
         logger.trace("\"/chat\" called with prompt = '$prompt'")
 
-        val (assistant, model) = Utils.getAssistant(call.request)
+        val (assistant, model) = Utils.getAssistant(call.request, true)
         val aiAnswer = assistant.chatWithTheJoker(prompt)
         call.respond(
             AiExtendedResponse(

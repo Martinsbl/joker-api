@@ -23,7 +23,7 @@ fun Route.configureJokeRouting() {
 
 private fun generateJoke(request: ApplicationRequest): AiExtendedResponse {
 
-    val (assistant, model) = Utils.getAssistant(request)
+    val (assistant, model) = Utils.getAssistant(request, false)
     val topic = AppConfig.jokeTopics.random()
     val prompt = "Tell me a joke about $topic"
     val aiAnswer = assistant.chat(prompt)

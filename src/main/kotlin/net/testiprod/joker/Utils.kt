@@ -39,15 +39,19 @@ object Utils {
         }
     }
 
-    fun getAssistant(request: ApplicationRequest): Pair<MyAIAssistant, ChatLanguageModel> {
+    fun getAssistant(request: ApplicationRequest, useChatMemory: Boolean): Pair<MyAIAssistant, ChatLanguageModel> {
         val model = getModel(request)
         val userId = request.queryParameters["userId"]
         requireNotNull(userId) { "Query param 'userId' must not be null" }
 
-        val assistant = AiServices.builder(MyAIAssistant::class.java)
+        val assistantBuilder = AiServices.builder(MyAIAssistant::class.java)
             .chatLanguageModel(model)
-            .chatMemoryProvider { memoryProvider.get(userId) }
-            .build()
+
+        if (useChatMemory) {
+            assistantBuilder.chatMemoryProvider { memoryProvider.get(userId) }
+        }
+
+        val assistant = assistantBuilder.build()
 
         return Pair(assistant, model)
     }
