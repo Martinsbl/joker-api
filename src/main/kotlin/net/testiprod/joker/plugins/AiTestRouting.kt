@@ -4,7 +4,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.joker.Utils
+import net.testiprod.joker.AiAssistantFactory
 import net.testiprod.joker.models.AiExtendedResponse
 import org.slf4j.LoggerFactory
 
@@ -13,13 +13,13 @@ private val logger = LoggerFactory.getLogger("net.testiprod.joker.plugins.config
 
 fun Route.configureAiTestRouting() {
     route("/test") {
-        get("/test") {
+        get {
             call.log()
             val prompt = call.request.queryParameters["prompt"]
             requireNotNull(prompt)
 
-            val (assistant, model) = Utils.getAssistant(call.request, false, true)
-            val aiAnswer = assistant.chat(prompt)
+            val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false)
+            val aiAnswer = assistant.robotChat(prompt)
 
             call.respond(
                 AiExtendedResponse(
@@ -34,7 +34,7 @@ fun Route.configureAiTestRouting() {
             val prompt = call.request.queryParameters["prompt"]
             requireNotNull(prompt)
 
-            val (assistant, model) = Utils.getAssistant(call.request, false, true)
+            val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false, true)
             val person = assistant.getPerson(prompt)
 
             call.respond(
@@ -46,7 +46,7 @@ fun Route.configureAiTestRouting() {
             val prompt = call.request.queryParameters["prompt"]
             requireNotNull(prompt)
 
-            val (assistant, model) = Utils.getAssistant(call.request, false, true)
+            val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false, true)
             val person = assistant.isPositive(prompt)
 
             call.respond(
@@ -58,7 +58,7 @@ fun Route.configureAiTestRouting() {
             val prompt = call.request.queryParameters["prompt"]
             requireNotNull(prompt)
 
-            val (assistant, model) = Utils.getAssistant(call.request, true)
+            val (assistant, model) = AiAssistantFactory.getAssistant(call.request, true)
             val stream = assistant.chatStream(prompt)
             stream.onNext(System.out::println)
                 .onComplete(System.out::println)

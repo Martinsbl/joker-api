@@ -5,7 +5,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.testiprod.joker.AppConfig
-import net.testiprod.joker.Utils
+import net.testiprod.joker.AiAssistantFactory
 import net.testiprod.joker.models.AiExtendedResponse
 import org.slf4j.LoggerFactory
 
@@ -23,7 +23,7 @@ fun Route.configureJokeRouting() {
 
 private fun generateJoke(request: ApplicationRequest): AiExtendedResponse {
 
-    val (assistant, model) = Utils.getAssistant(request, false)
+    val (assistant, model) = AiAssistantFactory.getAssistant(request, false)
     val topic = AppConfig.jokeTopics.random()
     val prompt = "Tell me a joke about $topic"
     val aiAnswer = assistant.chat(prompt)

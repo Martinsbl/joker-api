@@ -6,7 +6,7 @@ import dev.langchain4j.model.output.Response
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.joker.Utils
+import net.testiprod.joker.AiAssistantFactory
 import net.testiprod.joker.models.AiExtendedResponse
 import org.slf4j.LoggerFactory
 
@@ -34,7 +34,7 @@ fun Route.configureAiDialogRouting() {
 }
 
 private fun runDialog(call: ApplicationCall, prompt: String): Pair<List<Response<AiMessage>>, ChatLanguageModel> {
-    val (assistant, model) = Utils.getAssistant(call.request, true)
+    val (assistant, model) = AiAssistantFactory.getAssistant(call.request, true)
     val answers = mutableListOf<Response<AiMessage>>()
 
     var jokerAnswer = assistant.chatWithTheJoker(prompt)

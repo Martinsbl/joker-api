@@ -10,7 +10,7 @@ import net.testiprod.joker.ai.MemoryProvider
 import net.testiprod.joker.ai.Tools
 import net.testiprod.joker.plugins.MyAIAssistant
 
-object Utils {
+object AiAssistantFactory {
 
     private val memoryProvider = MemoryProvider()
 
@@ -24,6 +24,7 @@ object Utils {
                     .apiKey(AppConfig.azureConfig.apiKey)
                     .deploymentName(AppConfig.azureConfig.deploymentName)
                     .endpoint(AppConfig.azureConfig.apiEndpoint)
+                    .logRequestsAndResponses(true)
                 if (getJsonResponse) {
                     builder.responseFormat(ChatCompletionsJsonResponseFormat())
                 }
@@ -34,6 +35,8 @@ object Utils {
                 val builder = OpenAiChatModel.builder()
                     .apiKey(AppConfig.openAiConfig.apiKey)
                     .modelName(AppConfig.openAiConfig.modelName)
+                    .logRequests(true)
+                    .logResponses(true)
                 if (getJsonResponse) {
                     builder.responseFormat("json_schema").strictJsonSchema(true)
                 }

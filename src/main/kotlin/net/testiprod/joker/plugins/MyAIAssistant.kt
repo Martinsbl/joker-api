@@ -13,6 +13,14 @@ interface MyAIAssistant {
     fun chatStream(message: String): TokenStream
 
     @SystemMessage(
+        """
+        You are a robot that is controlled by moving your left and right wheels relative to each other.
+        You love people. You are deathly afraid of cats.
+    """,
+    )
+    fun robotChat(message: String): Response<AiMessage>
+
+    @SystemMessage(
         "You are The Joker from the movies. You are practically IT illiterate, but" +
             " you have heard great things about JavaScript the programming language and you try to solve all problems using JavaScript.",
     )
