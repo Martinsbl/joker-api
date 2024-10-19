@@ -5,6 +5,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.testiprod.joker.AiAssistantFactory
+import net.testiprod.joker.ai.Tools
 import net.testiprod.joker.models.AiExtendedResponse
 import org.slf4j.LoggerFactory
 
@@ -16,7 +17,7 @@ fun Route.configureAiTestRouting() {
         get {
             call.log()
             val prompt = call.request.queryParameters["prompt"]
-            requireNotNull(prompt)
+            requireNotNull(prompt) { "Query parameter 'prompt' is missing" }
 
             val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false)
             val aiAnswer = assistant.robotChat(prompt)
@@ -32,7 +33,7 @@ fun Route.configureAiTestRouting() {
         get("/person") {
             call.log()
             val prompt = call.request.queryParameters["prompt"]
-            requireNotNull(prompt)
+            requireNotNull(prompt) { "Query parameter 'prompt' is missing" }
 
             val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false, true)
             val person = assistant.getPerson(prompt)
@@ -44,9 +45,9 @@ fun Route.configureAiTestRouting() {
         get("/is-positive") {
             call.log()
             val prompt = call.request.queryParameters["prompt"]
-            requireNotNull(prompt)
+            requireNotNull(prompt) { "Query parameter 'prompt' is missing" }
 
-            val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false, true)
+            val (assistant, model) = AiAssistantFactory.getAssistant(call.request, false, true, Tools())
             val person = assistant.isPositive(prompt)
 
             call.respond(
@@ -56,14 +57,14 @@ fun Route.configureAiTestRouting() {
         get("/stream") {
             call.log()
             val prompt = call.request.queryParameters["prompt"]
-            requireNotNull(prompt)
+            requireNotNull(prompt) { "Query parameter 'prompt' is missing" }
 
             val (assistant, model) = AiAssistantFactory.getAssistant(call.request, true)
             val stream = assistant.chatStream(prompt)
             stream.onNext(System.out::println)
                 .onComplete(System.out::println)
                 .onError(Throwable::printStackTrace)
-                .start();
+                .start()
             call.respondText("adsølfkj ")
         }
     }
@@ -75,6 +76,6 @@ private fun ApplicationCall.log() {
     logger.trace(
         "\"${request.path()}\" called with params = [${
             params.entries().joinToString { "${it.key}=${it.value}" }
-        }"
+        }",
     )
 }

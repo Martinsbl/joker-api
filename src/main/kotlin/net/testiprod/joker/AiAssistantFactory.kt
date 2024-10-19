@@ -3,6 +3,7 @@ package net.testiprod.joker
 import com.azure.ai.openai.models.ChatCompletionsJsonResponseFormat
 import dev.langchain4j.model.azure.AzureOpenAiChatModel
 import dev.langchain4j.model.chat.ChatLanguageModel
+import dev.langchain4j.model.ollama.OllamaChatModel
 import dev.langchain4j.model.openai.OpenAiChatModel
 import dev.langchain4j.service.AiServices
 import io.ktor.server.request.*
@@ -43,6 +44,20 @@ object AiAssistantFactory {
 
                 builder.build()
             }
+
+            "ollama" -> {
+                val builder = OllamaChatModel.builder()
+                    .baseUrl("http://localhost:11434")
+                    .modelName("gemma2:27b")
+                    .logRequests(true)
+                    .logResponses(true)
+                if (getJsonResponse) {
+                    builder.format("json")
+                }
+
+                builder.build()
+            }
+
             else -> throw IllegalArgumentException("Unknown model name: $modelName")
         }
     }
@@ -51,6 +66,7 @@ object AiAssistantFactory {
         request: ApplicationRequest,
         useChatMemory: Boolean,
         getJsonResponse: Boolean = false,
+        tools: Tools? = null,
     ): Pair<MyAIAssistant, ChatLanguageModel> {
         val modelProvider = request.queryParameters["modelProvider"]
         requireNotNull(modelProvider) { "Query param 'modelProvider' must not be null" }
@@ -61,7 +77,10 @@ object AiAssistantFactory {
 
         val assistantBuilder = AiServices.builder(MyAIAssistant::class.java)
             .chatLanguageModel(model)
-            .tools(Tools())
+
+        tools?.let {
+            assistantBuilder.tools(Tools())
+        }
 
         if (useChatMemory) {
             assistantBuilder.chatMemoryProvider { memoryProvider.get(userId) }
