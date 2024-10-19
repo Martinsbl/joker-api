@@ -3,7 +3,6 @@ package net.testiprod.joker.plugins
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.testiprod.joker.AppConfig
 import net.testiprod.joker.BuildConfig
 import net.testiprod.joker.models.ApiInfo
 import net.testiprod.joker.models.ModelConfig
@@ -19,8 +18,8 @@ fun Route.configureInfoRouting() {
         val apiInfo = ApiInfo(
             BuildConfig.VERSION,
             listOf(
-                ModelConfig(ModelProvider("openai", "OpenAI"), listOf(AppConfig.openAiConfig.modelName)),
-                ModelConfig(ModelProvider("azure", "Azure OpenAI"), listOf(AppConfig.azureConfig.deploymentName)),
+                ModelConfig(ModelProvider("openai", "OpenAI"), listOf("gpt-4o-mini")),
+                ModelConfig(ModelProvider("azure", "Azure OpenAI"), listOf("gpt-4o-mini")),
             ),
         )
         call.respond(apiInfo)

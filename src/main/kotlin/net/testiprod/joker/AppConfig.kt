@@ -32,7 +32,6 @@ object AppConfig {
         return AzureConfig(
             azureConfig.getString("key"),
             azureConfig.getString("endpoint"),
-            azureConfig.getString("deployment-name"),
         )
     }
 
@@ -40,18 +39,15 @@ object AppConfig {
         val openAiConfig = config.getConfig("models.openai")
         return OpenAiConfig(
             openAiConfig.getString("key"),
-            openAiConfig.getString("model-name"),
         )
     }
 
     data class AzureConfig(
         val apiKey: String,
         val apiEndpoint: String,
-        val deploymentName: String,
     )
 
     data class OpenAiConfig(
         val apiKey: String,
-        val modelName: String,
     )
 }

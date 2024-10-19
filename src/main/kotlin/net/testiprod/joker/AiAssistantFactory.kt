@@ -16,14 +16,15 @@ object AiAssistantFactory {
     private val memoryProvider = MemoryProvider()
 
     private fun getModel(
+        modelProvider: String?,
         modelName: String?,
         getJsonResponse: Boolean,
     ): ChatLanguageModel {
-        return when (modelName) {
+        return when (modelProvider) {
             "azure" -> {
                 val builder = AzureOpenAiChatModel.builder()
                     .apiKey(AppConfig.azureConfig.apiKey)
-                    .deploymentName(AppConfig.azureConfig.deploymentName)
+                    .deploymentName(modelName)
                     .endpoint(AppConfig.azureConfig.apiEndpoint)
                     .logRequestsAndResponses(true)
                 if (getJsonResponse) {
@@ -35,7 +36,7 @@ object AiAssistantFactory {
             "openai" -> {
                 val builder = OpenAiChatModel.builder()
                     .apiKey(AppConfig.openAiConfig.apiKey)
-                    .modelName(AppConfig.openAiConfig.modelName)
+                    .modelName(modelName)
                     .logRequests(true)
                     .logResponses(true)
                 if (getJsonResponse) {
@@ -48,7 +49,7 @@ object AiAssistantFactory {
             "ollama" -> {
                 val builder = OllamaChatModel.builder()
                     .baseUrl("http://localhost:11434")
-                    .modelName("gemma2:27b")
+                    .modelName(modelName)
                     .logRequests(true)
                     .logResponses(true)
                 if (getJsonResponse) {
@@ -68,12 +69,13 @@ object AiAssistantFactory {
         getJsonResponse: Boolean = false,
         tools: Tools? = null,
     ): Pair<MyAIAssistant, ChatLanguageModel> {
-        val modelProvider = request.queryParameters["modelProvider"]
-        requireNotNull(modelProvider) { "Query param 'modelProvider' must not be null" }
-
-        val model = getModel(modelProvider, getJsonResponse)
         val userId = request.queryParameters["userId"]
         requireNotNull(userId) { "Query param 'userId' must not be null" }
+        val modelProvider = request.queryParameters["modelProvider"]
+        requireNotNull(modelProvider) { "Query param 'modelProvider' must not be null" }
+        val modelName = request.queryParameters["modelName"] ?: "gpt-4o-mini"
+
+        val model = getModel(modelProvider, modelName, getJsonResponse)
 
         val assistantBuilder = AiServices.builder(MyAIAssistant::class.java)
             .chatLanguageModel(model)
